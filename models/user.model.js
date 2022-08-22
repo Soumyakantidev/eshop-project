@@ -2,7 +2,7 @@
  * This file will contain the schema of the user model
  */
 const { trusted } = require("mongoose");
-const mongoose = require("moongose");
+const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     requires: true,
     default: "APPROVED",
   },
-  createAt: {
+  createdAt: {
     type: Date,
     default: () => {
       return Date.now();
