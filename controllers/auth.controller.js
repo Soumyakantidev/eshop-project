@@ -1,21 +1,32 @@
 /**
- * This file will have the logic to signup and users
+ * This file will have the logic to signup and signin users
  */
 
 /**
- * Create a function to allow the user to sign up
+ * Create a function to allow the user to sign
  *
- * whenever a user call the endpoint :
- * POST /crm/api/v1/signup , router should call the below method
+ * Wheneve a user calls the endpoint :
+ *
+ * POST /crm/api/v1/signup  , router should call the below method
+ * JSON request body   to be available as JS object
+ * {
+ *
+ *  }
  */
-const User = require("../models/user.model");
+
 const bcrypt = require("bcryptjs");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const authConfig = require("../configs/auth.config");
 
 exports.signup = async (req, res) => {
   /**
    * Logic handle the signup
+   */
+
+  /**
+   * First read the request body and create the JS object to be
+   * inserted in the DB
    */
 
   try {
@@ -26,19 +37,19 @@ exports.signup = async (req, res) => {
       userType: req.body.userType,
       password: bcrypt.hashSync(req.body.password, 8),
     };
-    /**
-     * I nedd to set the user status
-     */
 
+    /**
+     * I need to set the user status
+     */
     if (!userObj.userType || userObj.userType == "CUSTOMER") {
       userObj.userStatus = "APPROVED";
     } else {
       userObj.userStatus = "PENDING";
     }
-    /**
-     * Inser the data in the database
-     */
 
+    /**
+     * Insert  the data in the databse
+     */
     const savedUser = await User.create(userObj);
 
     const postResponse = {
@@ -51,50 +62,57 @@ exports.signup = async (req, res) => {
       updatedAt: savedUser.updatedAt,
     };
 
+    /**
+     * Return the success response to the customer
+     */
     res.status(201).send(postResponse);
   } catch (err) {
-    console.log("Error while registering user", err.message);
+    console.log("Error while registering user ", err.message);
     res.status(500).send({
       message: "Some internal server error",
     });
   }
 };
+
 /**
  * Controller code for the login
  */
 
 exports.signin = async (req, res) => {
-  /**
-   * Read the userId and password from the request body
-   */
-  const userIdFromReq = req.body.userId;
-  const password = req.body.password;
-
-  /**
-   * Ensure the userId is valid
-   */
-
-  const userSaved = await User.findOne({ userId: userIdFromReq });
   try {
+    /**
+     * Read the userId and password from the request
+     */
+    const userIdFromReq = req.body.userId;
+    const password = req.body.password;
+
+    /**
+     * Ensure the userId is valid
+     */
+    const userSaved = await User.findOne({ userId: userIdFromReq });
+
     if (!userSaved) {
       return res.status(401).send({
         message: "User id passed is not correct",
       });
     }
+
     /**
+     * Ensure that the password passed is valid
      *
-     *  Ensure that the passowrd passed is valid
-     *  plain text password
+     * plain text password
      * in DB we have encrypted password .. bcrypt
      */
     const isValidPassword = bcrypt.compareSync(password, userSaved.password);
+
     if (!isValidPassword) {
       return res.status(401).send({
-        message: "Incorrect password",
+        message: "Incorrect password !",
       });
     }
+
     /**
-     * Check if the useris in the aproved state
+     * Check if the user is in the approved state
      */
     if (userSaved.userStatus != "APPROVED") {
       return res.status(403).send({
@@ -103,11 +121,8 @@ exports.signin = async (req, res) => {
     }
 
     /**
-     *  we need to generate the aceess token (JWT based)
-     *
-     *
+     * We need to generate the access token ( JWT based )
      */
-
     const token = jwt.sign(
       {
         id: userSaved.userId,
@@ -119,20 +134,19 @@ exports.signin = async (req, res) => {
     );
 
     /**
-     *
      * Send the response back
-     *
      */
+
     res.status(200).send({
       name: userSaved.name,
       userId: userSaved.userId,
       email: userSaved.email,
       userType: userSaved.userType,
       userStatus: userSaved.userStatus,
-      accessToken: token,
+      accessToke: token,
     });
   } catch (err) {
-    console.log("Error while login", err.message);
+    console.log("Error while login ", err.message);
     res.status(500).send({
       message: "Internal server error",
     });

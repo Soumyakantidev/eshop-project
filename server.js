@@ -44,9 +44,9 @@ async function init() {
    */
   const user = await User.create({
     name: "Viswa",
-    userId: "admin",
+    userId: "viswa01",
     password: bcrypt.hashSync("Welcome1", 8),
-    email: "kankvish@gmail.com",
+    email: "admin@upgrad.com",
     userType: "ADMIN",
   });
   console.log(user);
@@ -60,3 +60,6 @@ require("./routes/auth.route")(app);
 app.listen(serverConfig.PORT, () => {
   console.log("Server started on the port no :", serverConfig.PORT);
 });
+/**
+ *
+ */
