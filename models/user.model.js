@@ -1,5 +1,6 @@
 /**
  * This file will contain the schema of the user model
+ * i have to create it
  */
 const { trusted } = require("mongoose");
 const mongoose = require("mongoose");
