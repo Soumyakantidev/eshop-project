@@ -9,9 +9,9 @@
  *
  * POST /crm/api/v1/signup  , router should call the below method
  * JSON request body   to be available as JS object
- * {
  *
- *  }
+ *
+ *
  */
 
 const bcrypt = require("bcryptjs");

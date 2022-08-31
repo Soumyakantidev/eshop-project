@@ -1,3 +1,3 @@
 module.exports = {
-  DB_URL: "mongodb://localhost/new_database",
+  DB_URL: "mongodb://localhost/CRM_databse",
 };
