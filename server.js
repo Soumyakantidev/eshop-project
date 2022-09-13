@@ -43,13 +43,13 @@ async function init() {
    *
    */
   const user = await User.create({
-    name: "Viswa",
-    userId: "viswa01",
+    name: "Soma",
+    userId: "01",
     password: bcrypt.hashSync("Welcome1", 8),
     email: "admin@upgrad.com",
     userType: "ADMIN",
   });
-  console.log(user);
+  console.log("Admin is", user.name);
 }
 
 /**
@@ -63,3 +63,4 @@ app.listen(serverConfig.PORT, () => {
 /**
  *
  */
+console.log("Hi");

@@ -36,7 +36,7 @@ exports.signup = async (req, res) => {
       email: req.body.email,
       userType: req.body.userType,
       password: bcrypt.hashSync(req.body.password, 8),
-    };
+    }; 
 
     /**
      * I need to set the user status

@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   userId: {
-    type: String,
+    type: Number,
     unique: true,
     required: true,
   },
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   userType: {
     type: String,
     required: true,
-    default: "CUSTOMER",
+    default: "PENDING",
   },
   userStatus: {
     type: String,
